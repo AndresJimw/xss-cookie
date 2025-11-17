@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1 class="page-title">Comments - Stored XSS</h1>
+        <p class="page-subtitle">
+            Comments are persisted on the server and rendered for every visitor. This simulates
+            a stored XSS vulnerability and its mitigated counterpart.
+        </p>
+    </div>
+</section>
+
+<section class="grid grid-2">
+    <article class="card">
+        <div class="card-header">
+            <h2 class="card-title">Add a comment</h2>
+        </div>
+        <form method="post" action="{{ url_for('main.comments') }}" class="form">
+            <label for="comment" class="form-label">Comment</label>
+            <textarea
+                id="comment"
+                name="text"
+                rows="4"
+                class="form-textarea"
+                placeholder="Write a benign comment, then experiment with XSS payloads..."
+            ></textarea>
+            <button type="submit" class="btn btn-primary">Submit comment</button>
+        </form>
+        <p class="muted">
+            Comments are stored in a JSON file.
+        </p>
+    </article>
+
+    <article class="card">
+        <div class="card-header card-header-inline">
+            <h2 class="card-title">Rendered comments</h2>
+            <span class="badge badge-stored">Stored</span>
+        </div>
+
+        <div class="split-output">
+            <div class="output-block output-block-danger">
+                <div class="output-label">Vulnerable view</div>
+                <div class="output-body">
+                    {% if comments %}
+                        <ul class="list">
+                        {% for c in comments %}
+                            <li class="list-item">
+                                <strong>#{{ c.id }}</strong>
+                                <span class="pill pill-time">{{ c.created_at }}</span>
+                                <div class="comment-body">
+                                    {{ c.text|safe }}
+                                </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="muted">No comments yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="output-block output-block-safe">
+                <div class="output-label">Mitigated view</div>
+                <div class="output-body">
+                    {% if secured_comments %}
+                        <ul class="list">
+                        {% for c in secured_comments %}
+                            <li class="list-item">
+                                <strong>#{{ c.id }}</strong>
+                                <span class="pill pill-time">{{ c.created_at }}</span>
+                                <div class="comment-body">
+                                    {{ c.safe_text }}
+                                </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="muted">No comments yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </article>
+</section>
+{% endblock %}

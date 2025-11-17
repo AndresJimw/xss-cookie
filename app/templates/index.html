@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1 class="page-title">Welcome to the XSS Cookie Lab</h1>
+        <p class="page-subtitle">
+            A deliberately vulnerable web application to study cross-site scripting (XSS),
+            cookie theft, blind XSS and simple context-based mitigation.
+        </p>
+    </div>
+</section>
+
+<section class="grid grid-2">
+    <!-- Left: scenarios overview -->
+    <article class="card scenario-card">
+        <div class="card-header">
+            <h2 class="card-title">Scenarios</h2>
+            <p class="card-subtitle">
+                Each endpoint represents a different attack surface along the XSS life cycle.
+            </p>
+        </div>
+        <ul class="list">
+            <li class="list-item scenario-item">
+                <div class="scenario-badge">
+                    <span class="badge badge-reflected">Reflected</span>
+                </div>
+                <div class="scenario-body">
+                    <div class="scenario-path">
+                        <code>/search</code>
+                    </div>
+                    <p class="scenario-desc">
+                        Reflects user input directly in the response to illustrate classic
+                        reflected XSS using a query parameter.
+                    </p>
+                </div>
+            </li>
+            <li class="list-item scenario-item">
+                <div class="scenario-badge">
+                    <span class="badge badge-stored">Stored</span>
+                </div>
+                <div class="scenario-body">
+                    <div class="scenario-path">
+                        <code>/comments</code>
+                    </div>
+                    <p class="scenario-desc">
+                        Persists comments on the server and renders them for every visitor,
+                        simulating a stored XSS vulnerability.
+                    </p>
+                </div>
+            </li>
+            <li class="list-item scenario-item">
+                <div class="scenario-badge">
+                    <span class="badge badge-blind">Blind</span>
+                </div>
+                <div class="scenario-body">
+                    <div class="scenario-path">
+                        <code>/contact</code> → <code>/admin/messages</code>
+                    </div>
+                    <p class="scenario-desc">
+                        Models blind XSS where the payload is only rendered when an admin
+                        opens the messages panel.
+                    </p>
+                </div>
+            </li>
+            <li class="list-item scenario-item">
+                <div class="scenario-badge">
+                    <span class="badge badge-impact">Impact</span>
+                </div>
+                <div class="scenario-body">
+                    <div class="scenario-path">
+                        <code>/steal</code> → <code>/admin/cookies</code>
+                    </div>
+                    <p class="scenario-desc">
+                        Captures cookie-like data sent to the collector endpoint and exposes
+                        it in an admin view to show tangible impact.
+                    </p>
+                </div>
+            </li>
+        </ul>
+    </article>
+
+    <!-- Right: guided workflow -->
+    <article class="card card-soft">
+        <div class="card-header">
+            <h2 class="card-title">How to use</h2>
+        </div>
+        <ol class="list list-ordered usage-list">
+            <li class="list-item usage-step">
+                <span class="usage-text">
+                    Start with <code>/search</code> to observe a simple reflected XSS
+                    and how the mitigated view differs from the vulnerable one.
+                </span>
+            </li>
+            <li class="list-item usage-step">
+                <span class="usage-text">
+                    Move to <code>/comments</code> to store payloads on the server and see
+                    how stored XSS affects every visitor to the page.
+                </span>
+            </li>
+            <li class="list-item usage-step">
+                <span class="usage-text">
+                    Use <code>/contact</code> and then <code>/admin/messages</code> to simulate
+                    a blind XSS targeting an administrator who reviews user messages.
+                </span>
+            </li>
+            <li class="list-item usage-step">
+                <span class="usage-text">
+                    Trigger requests to <code>/steal</code> from your payloads and review the
+                    collected evidence inside <code>/admin/cookies</code>.
+                </span>
+            </li>
+            <li class="list-item usage-step">
+                <span class="usage-text">
+                    Switch the security mode to <code>log</code> or <code>block</code> using
+                    environment variables and compare the behavior of the vulnerable and
+                    mitigated views.
+                </span>
+            </li>
+        </ol>
+    </article>
+</section>
+{% endblock %}
