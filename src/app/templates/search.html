@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1 class="page-title">Reflected XSS</h1>
+        <p class="page-subtitle">
+            This endpoint reflects a user-controlled parameter back into the page. Use it to
+            illustrate classical reflected XSS and the effect of simple output encoding.
+        </p>
+    </div>
+</section>
+
+<section class="grid">
+    <article class="card">
+        <div class="card-header">
+            <h2 class="card-title">Search input</h2>
+        </div>
+        <form method="get" action="{{ url_for('main.search') }}" class="form">
+            <label for="q" class="form-label">Query string</label>
+            <input
+                type="text"
+                id="q"
+                name="q"
+                class="form-input"
+                placeholder="Try normal text, then XSS payloads..."
+                value="{{ query|default('') }}"
+            >
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <p class="muted">
+            In the vulnerable view the parameter is rendered without escaping.
+            In the mitigated view the same value is passed through a simple context-based filter.
+        </p>
+    </article>
+
+    {% if query %}
+    <article class="card">
+        <div class="card-header card-header-inline">
+            <h2 class="card-title">Rendering comparison</h2>
+            <span class="badge badge-reflected">Reflected</span>
+        </div>
+
+        <div class="split-output">
+            <div class="output-block output-block-danger">
+                <div class="output-label">Vulnerable rendering</div>
+                <div class="output-body">
+                    {{ raw_output|safe }}
+                </div>
+            </div>
+            <div class="output-block output-block-safe">
+                <div class="output-label">Mitigated rendering</div>
+                <div class="output-body">
+                    {{ safe_output }}
+                </div>
+            </div>
+        </div>
+    </article>
+    {% endif %}
+</section>
+{% endblock %}

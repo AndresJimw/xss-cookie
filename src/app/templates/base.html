@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>XSS Cookie Lab</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="app-shell">
+
+    <header class="topbar">
+        <div class="topbar-inner">
+            <div class="brand">
+                <div class="brand-logo">X</div>
+                <div class="brand-text">
+                    <span class="brand-title">XSS Cookie Lab</span>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <a href="{{ url_for('main.index') }}"
+                   class="nav-link {% if request.endpoint == 'main.index' %}nav-link-active{% endif %}">
+                    Home
+                </a>
+                <a href="{{ url_for('main.search') }}"
+                   class="nav-link {% if request.endpoint == 'main.search' %}nav-link-active{% endif %}">
+                    Search
+                </a>
+                <a href="{{ url_for('main.comments') }}"
+                   class="nav-link {% if request.endpoint == 'main.comments' %}nav-link-active{% endif %}">
+                    Comments
+                </a>
+                <a href="{{ url_for('main.contact') }}"
+                   class="nav-link {% if request.endpoint == 'main.contact' %}nav-link-active{% endif %}">
+                    Contact
+                </a>
+                <a href="{{ url_for('main.admin_messages') }}"
+                   class="nav-link {% if request.endpoint == 'main.admin_messages' %}nav-link-active{% endif %}">
+                    Admin Messages
+                </a>
+                <a href="{{ url_for('main.admin_cookies') }}"
+                   class="nav-link {% if request.endpoint == 'main.admin_cookies' %}nav-link-active{% endif %}">
+                    Admin Cookies
+                </a>
+            </nav>
+
+            <div class="mode-pill">
+                <span class="mode-label">Security mode</span>
+                <span class="mode-badge mode-badge-{{ security_mode|default('off') }}">
+                    {{ security_mode|default('off') }}
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <span>Demo lab for XSS, cookie theft and mitigation.</span>
+            <span class="footer-hint">Running on Flask</span>
+        </div>
+    </footer>
+
+</div>
+</body>
+</html>

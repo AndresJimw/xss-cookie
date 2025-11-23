@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-header">
+    <div>
+        <h1 class="page-title">Admin panel – Stolen cookies</h1>
+        <p class="page-subtitle">
+            This view displays the evidence collected by the <code>/steal</code> endpoint.
+            Each entry corresponds to a request that sent a cookie-like value.
+        </p>
+    </div>
+</section>
+
+<section class="grid">
+    <article class="card">
+        <div class="card-header card-header-inline">
+            <h2 class="card-title">Collected entries</h2>
+            <span class="badge badge-impact">Impact</span>
+        </div>
+
+        {% if entries %}
+            <div class="table-wrapper">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp (UTC)</th>
+                            <th>IP</th>
+                            <th>Cookie value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for e in entries %}
+                        <tr>
+                            <td>{{ e.timestamp }}</td>
+                            <td>{{ e.ip }}</td>
+                            <td><code>{{ e.cookie }}</code></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="muted">No stolen cookies recorded yet.</p>
+        {% endif %}
+    </article>
+</section>
+{% endblock %}

