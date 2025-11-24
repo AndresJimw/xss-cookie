@@ -7,6 +7,7 @@ from flask import (
     render_template,
     request,
     url_for,
+    jsonify,
 )
 
 from . import storage
@@ -15,7 +16,6 @@ from . import security
 bp = Blueprint("main", __name__)
 
 def init_app(app: Flask) -> None:
-    """Registra el blueprint y el hook after_request."""
     app.register_blueprint(bp)
 
     @app.after_request
@@ -24,13 +24,11 @@ def init_app(app: Flask) -> None:
 
 @bp.route("/")
 def index():
-    """Página inicial del lab."""
     security_mode = security.get_security_mode()
     return render_template("index.html", security_mode=security_mode)
 
 @bp.route("/search")
 def search():
-    """Escenario de XSS reflejado: GET /search?q=..."""
     query = request.args.get("q", "")
 
     raw_output = query
@@ -46,7 +44,6 @@ def search():
 
 @bp.route("/comments", methods=["GET", "POST"])
 def comments():
-    """Escenario de XSS almacenado: comentarios."""
     if request.method == "POST":
         text = request.form.get("text", "")
         if text:
@@ -54,10 +51,14 @@ def comments():
         return redirect(url_for("main.comments"))
 
     comments = storage.load_comments()
+
     secured_comments = [
         {
             **comment,
-            "safe_text": security.secure_output(comment.get("text", ""), context="html"),
+            "safe_text": security.secure_output(
+                comment.get("text", ""),
+                context="html",
+            ),
         }
         for comment in comments
     ]
@@ -71,7 +72,6 @@ def comments():
 
 @bp.route("/contact", methods=["GET", "POST"])
 def contact():
-    """Punto de entrada de Blind XSS: formulario de contacto."""
     if request.method == "POST":
         message = request.form.get("message", "")
         if message:
@@ -90,17 +90,16 @@ def contact():
 
 @bp.route("/admin/messages")
 def admin_messages():
-    """
-    Panel de admin que muestra mensajes.
-    Aquí se materializa Blind XSS.
-    """
     messages = storage.load_messages()
     storage.log_blind_xss_event(message_count=len(messages))
 
     secured_messages = [
         {
             **m,
-            "safe_text": security.secure_output(m.get("text", ""), context="html"),
+            "safe_text": security.secure_output(
+                m.get("text", ""),
+                context="html",
+            ),
         }
         for m in messages
     ]
@@ -114,10 +113,6 @@ def admin_messages():
 
 @bp.route("/steal")
 def steal():
-    """
-    Mini cookie collector: GET /steal?c=<cookie_value>.
-    Registra IP y valor de c en el log.
-    """
     cookie_value = request.args.get("c", "")
     ip = request.headers.get("X-Forwarded-For", request.remote_addr or "unknown")
 
@@ -128,10 +123,48 @@ def steal():
 
 @bp.route("/admin/cookies")
 def admin_cookies():
-    """Panel de admin que muestra cookies robadas."""
     entries = storage.read_stolen_cookies()
     return render_template(
         "admin_cookies.html",
         entries=entries,
         security_mode=security.get_security_mode(),
     )
+
+
+@bp.route("/api/test_payload", methods=["POST"])
+def api_test_payload():
+    """
+    API endpoint used by the experiments notebook.
+    """
+    data = request.get_json(silent=True) or {}
+    payload = data.get("payload") or ""
+    context = (data.get("context") or "html").lower()
+
+    analysis = security.analyze_input(payload, context=context)
+    sanitized = security.secure_output(payload, context=context)
+    mode = security.get_security_mode()
+
+    is_suspicious = bool(analysis.get("is_suspicious"))
+    reasons = analysis.get("reasons", [])
+    categories = analysis.get("categories", [])
+    main_category = analysis.get("main_category")
+    if not main_category:
+        main_category = "benign" if not is_suspicious else "unknown"
+
+    blocked = False
+    if mode == "block" and is_suspicious:
+        blocked = True
+
+    response_data = {
+        "original": payload,
+        "sanitized": sanitized,
+        "blocked": blocked,
+        "category": main_category,
+        "mode": mode,
+        "is_suspicious": is_suspicious,
+        "reasons": reasons,
+        "categories": categories,
+        "context": context,
+    }
+
+    return jsonify(response_data)

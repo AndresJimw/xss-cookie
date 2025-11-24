@@ -6,22 +6,16 @@ from flask import Flask
 
 
 def create_app() -> Flask:
-    """Crea y configura la aplicación Flask."""
-    # Cargar variables desde .env
     base_dir = Path(__file__).resolve().parents[1]
-    env_path = base_dir / ".env"
-    if env_path.exists():
-        load_dotenv(env_path)
+    env_file = base_dir / ".env"
+    if env_file.exists():
+        load_dotenv(env_file)
 
     app = Flask(__name__)
 
-    # Configuración básica
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-key")
+    app.config["SECURITY_MODE"] = os.getenv("SECURITY_MODE", "off").lower()
 
-    # Modo de seguridad del mitigador simple
-    app.config["SECURITY_MODE"] = os.getenv("SECURITY_MODE", "off")
-
-    # Registrar rutas y hooks
     from . import routes
     routes.init_app(app)
 
