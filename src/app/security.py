@@ -173,9 +173,15 @@ def analyze_input(value: str, context: str) -> Dict[str, Any]:
 
     lowered = value.lower()
     matches = _analyze_patterns(lowered)
-    cats = _extract_categories(matches)
 
     groups_present = {m["group"] for m in matches}
+
+    if groups_present == {"image_tag"}:
+        matches = []
+        groups_present = set()
+
+    cats = _extract_categories(matches)
+
     patterns_present = {m["pattern"] for m in matches}
 
     reasons: List[str] = []
