@@ -415,15 +415,7 @@ pytest -q
 
 ---
 
-# 17. Academic Citation
-
-If used in research:
-
-Nieto, B. A. J. (2025). *XSS Cookie Lab: A Context-Based Evaluation Environment for Cross-Site Scripting Mitigation*. Yachay Tech University.
-
----
-
-# 18. Conclusion
+# 17. Conclusion
 
 This repository provides a full-stack environment for studying XSS in a rigorous, empirical, and reproducible way. It bridges educational demonstration, research methodology, and automated evaluation in a single, coherent platform. The combination of a vulnerable application, contextual mitigation, and a large unified corpus allows users to understand both the mechanics of XSS and the practical trade-offs involved in designing real-world defenses.
 
