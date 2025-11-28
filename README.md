@@ -54,9 +54,6 @@ This repository aims to:
 - Research on pattern-based and contextual mitigators
 - Data-driven security evaluation
 
-### 4. Serve as the companion repository for an academic article titled:
-**“Context-Based Evaluation of Cross-Site Scripting Mitigation in a Flask Security Laboratory.”**
-
 ---
 
 # 3. High-Level Architecture
